@@ -7,10 +7,10 @@ SPAUTOREGRESSOR  Sparse autoregressor for time series modeling
    by F. Vides
 @author: Fredy Vides
 """
-def SpAutoRegressor(x,ssp,sp,pp,L0,tol,delta):
-    from numpy import ceil,floor,max,min,asmatrix
+def SpAutoRegressor(x,ssp,sp,pp,L0,tol,delta,nz = 100):
+    from numpy import ceil,floor,max,min
     from scipy.linalg import hankel
-    from lsspsolver import lsspsolver
+    from spsolver import spsolver
     sl = len(x)
     ssp=int(ceil(sl*ssp))
     x = x[0:sl:ssp]
@@ -18,11 +18,9 @@ def SpAutoRegressor(x,ssp,sp,pp,L0,tol,delta):
     sp = int(ceil(sp*sl))
     xt = x[:sp]
     pp = max([min([floor(pp*sp),sl-sp]),L0])
-    xl = x[(sp+1):]
     L=L0
     H=hankel(xt[:L],xt[(L-1):])
-    Lh=H.shape[1]
     H0=H[:,:-1]
-    H1=H[L-1,1:]
-    A = lsspsolver(H0.T,H1.T,L,tol,delta)
+    H1=H[L-1:,1:]
+    A = spsolver(H0.T,H1.T,L,"svd",nz,tol,delta)
     return A.T,H0[:,0]   

@@ -7,15 +7,12 @@ INPUTSPREPRESENTATION Sparse representation of input weights of the GRU model
 @author: Fredy Vides
 """
 def IWSpRepresentation(H,model,delta,tol):
-    from lsspsolver import lsspsolver
+    from spsolver import spsolver
     from numpy import array
     W = model.layers[0].get_weights()
     X01 = H@W[0]
-    U = []
-    for k in range(W[0].shape[1]):
-        w1 = lsspsolver(H,X01[:,k],W[0].shape[0],delta,5e-3)
-        U.append(w1)
-    U=array(U)
-    W[0] = U.T
+    U = spsolver(H,X01,W[0].shape[0],"svd",W[0].shape[0],delta,tol)
+    U = array(U)
+    W[0] = U
     model.layers[0].set_weights(W)
     return model
