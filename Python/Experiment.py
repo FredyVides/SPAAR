@@ -34,8 +34,8 @@ def Experiment(experiment_number):
         data = read_csv(url,header=None).values[:,0]
         Lag = LagEstimate(data,100) + 3
         Lag_AR = Lag
-        L0 = 625
-        L0_AR = 750        
+        L0 = 606
+        L0_AR = 2013        
         T = 576
     else:
         tol = 5e-3
@@ -45,7 +45,7 @@ def Experiment(experiment_number):
         data = read_csv(url,header=None).values[:,0]
         Lag = LagEstimate(data.copy(),850)
         Lag_AR = Lag
-        L0 = 950
+        L0 = 880
         L0_AR = 1755
         T = 295
         
@@ -67,12 +67,9 @@ def Experiment(experiment_number):
     Xs = xs.copy()
     Xs = Xs[:len(Xs):ss]
     train = Xs[:L0_AR]
-    if experiment_number <= 1:
-        model = AutoReg(train, lags=0, old_names=False, seasonal=True, period=Lag_AR+1)
-    else:
-        model = AutoReg(train, lags=Lag_AR, old_names=False)
+    model = AutoReg(train, lags=Lag_AR, old_names=False, trend = 'n')
     model_fit = model.fit()
-    B = fliplr(reshape(model_fit.params[1:],(1,Lag_AR)))
+    B = fliplr(reshape(model_fit.params,(1,Lag_AR)))
     # Using sparse autoregressor
     A,h_0 = SpAutoRegressor(xs,1/len(xs),sampling_proportion,1,Lag,tol,delta,nz)
     # Using TensorFlow GRU RNN
