@@ -28,7 +28,7 @@ def Experiment(experiment_number):
     if experiment_number <= 1:
         tol = 5e-4
         delta = 5e-3
-        sampling_proportion = 5/32
+        sampling_proportion = 17/100
         url = "https://raw.githubusercontent.com/FredyVides/SPAAR/main/DataSets/NoisyNLSystem1Data.csv"
         data = read_csv(url,header=None).values[:,0]
         Lag = LagEstimate(data,1)
