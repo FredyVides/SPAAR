@@ -25,28 +25,29 @@ def Experiment(experiment_number):
     from IWSpRepresentation import IWSpRepresentation
     
     
-    nz = 30
     if experiment_number <= 1:
         tol = 5e-4
         delta = 5e-3
         sampling_proportion = 5/32
         url = "https://raw.githubusercontent.com/FredyVides/SPAAR/main/DataSets/NoisyNLSystem1Data.csv"
         data = read_csv(url,header=None).values[:,0]
-        Lag = LagEstimate(data,100) + 3
+        Lag = LagEstimate(data,1)
+        nz = Lag
         Lag_AR = Lag
-        L0 = 606
-        L0_AR = 2013        
+        L0 = Lag+int(0.17*nz)
+        L0_AR = 2017        
         T = 576
     else:
         tol = 5e-3
-        delta = 2e-2
+        delta = 3e-2
         sampling_proportion = 19/100
         url = "https://raw.githubusercontent.com/FredyVides/SPAAR/main/DataSets/NoisyNLSystem2Data.csv"
         data = read_csv(url,header=None).values[:,0]
-        Lag = LagEstimate(data.copy(),850)
+        Lag = 3*LagEstimate(data.copy(),10)
+        nz = Lag
         Lag_AR = Lag
-        L0 = 880
-        L0_AR = 1755
+        L0 = Lag+int(0.02*nz)
+        L0_AR = 2*Lag_AR+86
         T = 295
         
     nn = 16
