@@ -35,7 +35,8 @@ def Experiment(experiment_number):
         nz = Lag
         Lag_AR = Lag
         L0 = Lag+int(0.17*nz)
-        L0_AR = 2017        
+        L0_AR = 2017
+        M0 = int((9/50)*len(data))
         T = 576
     else:
         tol = 5e-3
@@ -48,6 +49,7 @@ def Experiment(experiment_number):
         Lag_AR = Lag
         L0 = Lag+int(0.02*nz)
         L0_AR = 2*Lag_AR+86
+        M0 = int((1/5)*len(data))
         T = 295
         
     nn = 16
@@ -154,12 +156,12 @@ def Experiment(experiment_number):
     
     # Compute mixed model and plot the results summary
     
-    A0 = zeros((3,L0))
-    A0[0,:] = y[:L0]
-    A0[1,:] = X[:L0]
-    A0[2,:] = X1[:L0]
-    d = zeros((L0,1))
-    d[:,0] = data[:L0]
+    A0 = zeros((3,M0))
+    A0[0,:] = y[:M0]
+    A0[1,:] = X[:M0]
+    A0[2,:] = X1[:M0]
+    d = zeros((M0,1))
+    d[:,0] = data[:M0]
     W0 = spsolver(A0.T,d,100,"svd",3,1e-3,5e-5)
     print("Mixing coefficients: ",W0)
     
